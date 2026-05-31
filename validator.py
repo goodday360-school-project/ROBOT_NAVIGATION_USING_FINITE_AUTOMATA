@@ -1,0 +1,1 @@
+from automata import DFA, S_DEAD
