@@ -16,6 +16,7 @@ def main():
     robot.x, robot.y = 0, 0
     robot.update_position()
 
+    # -> Below code are testing code
     # Example controls
     def move_forward():
         robot.move("forward")
@@ -34,6 +35,8 @@ def main():
     tk.Button(root, text="Backward", command=move_backward).pack(side="left")
     tk.Button(root, text="Rotate Left", command=rotate_left).pack(side="left")
     tk.Button(root, text="Rotate Right", command=rotate_right).pack(side="left")
+    # <-
+
 
     root.mainloop()
 
