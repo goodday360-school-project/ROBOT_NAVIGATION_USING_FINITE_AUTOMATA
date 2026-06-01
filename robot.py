@@ -1,4 +1,3 @@
-import tkinter as tk
 from PIL import Image, ImageTk   # Pillow for scaling + rotation
 from grid import CELL_SIZE, GRID_SIZE
 

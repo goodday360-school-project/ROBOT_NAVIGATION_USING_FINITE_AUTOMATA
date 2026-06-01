@@ -51,21 +51,18 @@ loop : (forward -> left)x4
 - cannot drop before pick
 - al least 2 pick-drop tasks
 - detect counter-clockwise loop: F L F L F L F L
-- reject clockwise loop: F R F R F R F R
 - Files: loop_detector.py, tasks.py
 
 ## Gui/simulation
-- Build GUI
-- Draw 8 * 8 grid
-- Show robot movement step-by-step
-- display: energy, direction, position, carrying object
-- input command interface
-- animation/update system
-- Files: simulation.py, gui.py, main.py (build with gui.py)
+- create start button
+- before move robot press start (others buttons are hidden)
+- when start button press, other buttons shows and start buttons will be hidden
+- when you ends the tasks, you can stop (robot ) and start button shows
+- Files: main.py, grid.py
 
 shared.py  ←  imported by ALL files above
 main.py
-  └── gui.py
+  └── grid.py
         ├── validator.py
         │     ├── automata.py
         │     └── constraints.py
@@ -73,6 +70,5 @@ main.py
         │           └── loop_detector.py
         └── simulation.py
               ├── robot.py
-              ├── grid.py
               └── tasks.py
 

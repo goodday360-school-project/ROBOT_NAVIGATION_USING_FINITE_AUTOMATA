@@ -6,7 +6,7 @@ from constraint import Constraints
 
 def main():
     root = tk.Tk()
-    root.title("Grid + Robot")
+    root.title("Robot Navigation Simulator")
     root.configure(bg="#1a1a2e")
     root.resizable(False, False)
 
