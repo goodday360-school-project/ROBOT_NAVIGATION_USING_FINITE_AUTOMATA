@@ -17,14 +17,14 @@ pip install -r requirements.txt
 - the robot must perform at least one counter-clockwise 
 loop : (forward -> left)x4
 
-## Main:
+## Main: ✅
 - Define the command language alphabet
 - create DFA/NFA states
 - create transition rules
 - handle logic
 - Files: shared.py, automata.py, validator.py
 
-## Robot Movement & Grid System:
+## Robot Movement & Grid System: ✅
 - build 8 * 8 grid System
 - Robot coordinates
 - Robot directions: north, south, east and west
