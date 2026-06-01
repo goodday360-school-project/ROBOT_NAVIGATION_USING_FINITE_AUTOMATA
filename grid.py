@@ -11,6 +11,7 @@ CELL_ODD = "#16213e"
 BORDER_COLOR = "#e94560"
 LABEL_COLOR = "#a8b2d8"
 COORD_COLOR = "#64ffda"
+ENERGY_COLOR = "#00ff00"  # green for energy
 
 
 def create_grid(canvas):
@@ -58,9 +59,23 @@ def create_grid(canvas):
             )
 
 
+def create_energy_display(canvas, canvas_w, canvas_h):
+    """Create energy display at top-right of canvas"""
+    energy_text_id = canvas.create_text(
+        canvas_w - PADDING - 35, PADDING-12 ,
+        text="Energy: 5/5", fill=ENERGY_COLOR, font=("Courier New", 12, "bold")
+    )
+    return energy_text_id
+
+
+def update_energy_display(canvas, energy_text_id, current_energy, max_energy):
+    """Update energy display text"""
+    canvas.itemconfig(energy_text_id, text=f"Energy: {current_energy}/{max_energy}")
+
+
 def init_canvas(root):
     canvas_w = GRID_SIZE * CELL_SIZE + AXIS_OFFSET + PADDING * 2
     canvas_h = GRID_SIZE * CELL_SIZE + AXIS_OFFSET + PADDING * 2
     canvas = tk.Canvas(root, width=canvas_w, height=canvas_h, bg=BG_COLOR, highlightthickness=0)
     canvas.pack(padx=PADDING, pady=PADDING)
-    return canvas, (PADDING + AXIS_OFFSET, PADDING)
+    return canvas, (PADDING + AXIS_OFFSET, PADDING), canvas_w, canvas_h

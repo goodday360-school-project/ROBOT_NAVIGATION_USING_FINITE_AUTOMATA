@@ -77,11 +77,12 @@ class DFA:
             self.state = S_DEAD
             return self.state
         
-        next_state = TRANSITION_TABLE.get(self.state, {}).get(command,S_DEAD)
+        next_state = TRANSITION_TABLE.get(self.state, {}).get(command, S_DEAD)
         if command == CMD_STOP and self.state not in accept_states:
             next_state = S_DEAD
-            self.state = next_state
-            return self.state
+        
+        self.state = next_state  #  Always assign state
+        return self.state
         
     def is_alive(self) -> bool:
         return self.state != S_DEAD
