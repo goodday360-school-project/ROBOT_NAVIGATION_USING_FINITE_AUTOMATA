@@ -1,5 +1,10 @@
 # ROBOT_NAVIGATION_USING_FINITE_AUTOMATA
 
+## Install Dependency
+```
+pip install -r requirements.txt
+```
+
 ## Rules:
 - the sequence must begin with START and end with STOP (Stop only accecpt on q2 or q4)
 - at least one movement F or B must occur before stop is legal.
