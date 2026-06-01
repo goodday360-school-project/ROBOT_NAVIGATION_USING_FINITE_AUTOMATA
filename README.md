@@ -33,7 +33,7 @@ loop : (forward -> left)x4
 - Direction rotation logic
 - Files: robot.py, grid.py
 
-## Energy & Rule Constraints
+## Energy & Rule Constraints ✅
 - the rules: F = forward, B = backward, L = left...
 - Energy system
 - Recharge logic
