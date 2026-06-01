@@ -1,5 +1,5 @@
 import tkinter as tk
-from grid import create_energy_display, init_canvas, create_grid, update_energy_display
+from grid import create_energy_display, init_canvas, create_grid, update_energy_display, create_text_display, log_message
 from robot import Robot
 from energy import Energy
 from constraint import Constraints
@@ -9,6 +9,10 @@ def main():
     root.title("Robot Navigation Simulator")
     root.configure(bg="#1a1a2e")
     root.resizable(False, False)
+
+    # Create text display at top middle
+    text_output = create_text_display(root)
+    log_message(text_output, "Robot Navigation Simulator initialized!")
 
     canvas, origin, canvas_w, canvas_h = init_canvas(root)
     create_grid(canvas)
@@ -31,72 +35,76 @@ def main():
     def move_forward():
         # Check constraint first (no reverse movement)
         if not constraints.is_valid("forward"):
-            print("Cannot go forward! You just went backward. Do something else first.")
+            log_message(text_output, "Cannot go forward! You just went backward.")
             return
         
         if energy.can_execute("forward"):
             robot.move("forward")
-            constraints.update("forward")  # Remember this movement
+            constraints.update("forward")
             energy.consume("forward")
             update_energy_display(canvas, energy_text_id, energy.current, energy.max)
+            log_message(text_output, f"Moved forward!")
         else:
-            print("Not enough energy!")
+            log_message(text_output, "Not enough energy!")
 
     def move_backward():
         # Check constraint first (no reverse movement)
         if not constraints.is_valid("back"):
-            print("Cannot go backward! You just went forward. Do something else first.")
+            log_message(text_output, "Cannot go backward! You just went forward.")
             return
         
         if energy.can_execute("back"):
             robot.move("backward")
-            constraints.update("back")  # Remember this movement
+            constraints.update("back")
             energy.consume("back")
             update_energy_display(canvas, energy_text_id, energy.current, energy.max)
+            log_message(text_output, f"Moved backward! ")
         else:
-            print("Not enough energy!")
+            log_message(text_output, "Not enough energy!")
 
     def rotate_left():
         # Check constraint (no consecutive left turns)
         if not constraints.is_valid("left"):
-            print("Cannot turn left twice in a row!")
+            log_message(text_output, "Cannot turn left twice in a row!")
             return
         
         if energy.can_execute("left"):
             robot.rotate_left()
-            constraints.update("left")  # Remember this turn
+            constraints.update("left")
             energy.consume("left")
             update_energy_display(canvas, energy_text_id, energy.current, energy.max)
+            log_message(text_output, f"Rotated left! ")
         else:
-            print("Not enough energy!")
+            log_message(text_output, "Not enough energy!")
 
     def rotate_right():
         # Check constraint (no consecutive right turns)
         if not constraints.is_valid("right"):
-            print("Cannot turn right twice in a row!")
+            log_message(text_output, "Cannot turn right twice in a row!")
             return
         
         if energy.can_execute("right"):
             robot.rotate_right()
-            constraints.update("right")  # Remember this turn
+            constraints.update("right")
             energy.consume("right")
             update_energy_display(canvas, energy_text_id, energy.current, energy.max)
+            log_message(text_output, f"Rotated right! ")
         else:
-            print("Not enough energy!")
+            log_message(text_output, "Not enough energy!")
 
     # recharge and reset energy
     def recharge():
         if energy.consume("recharge"):
             update_energy_display(canvas, energy_text_id, energy.current, energy.max)
-            print("Recharged!")
+            log_message(text_output, "Recharged! Energy: 5/5")
         else:
-            print("Can only recharge when energy = 0")
+            log_message(text_output, "Can only recharge when energy = 0")
 
     def reset_energy():
         energy.reset()
-        constraints.reset()  # Also reset constraints
+        constraints.reset()
         update_energy_display(canvas, energy_text_id, energy.current, energy.max)
-        print("Energy and constraints reset")
+        log_message(text_output, "Energy and constraints reset!")
 
     # Buttons for testing
     tk.Button(root, text="Forward", command=move_forward).pack(side="left")
@@ -105,7 +113,6 @@ def main():
     tk.Button(root, text="Rotate Right", command=rotate_right).pack(side="left")
     tk.Button(root, text="Recharge", command=recharge).pack(side="left")
     tk.Button(root, text="Reset Energy", command=reset_energy).pack(side="left")
-    # <-
 
     root.mainloop()
 

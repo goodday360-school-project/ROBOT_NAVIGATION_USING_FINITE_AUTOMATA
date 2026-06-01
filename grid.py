@@ -79,3 +79,28 @@ def init_canvas(root):
     canvas = tk.Canvas(root, width=canvas_w, height=canvas_h, bg=BG_COLOR, highlightthickness=0)
     canvas.pack(padx=PADDING, pady=PADDING)
     return canvas, (PADDING + AXIS_OFFSET, PADDING), canvas_w, canvas_h
+# CREATE TEXT DISPLAY
+def create_text_display(root):
+
+    message_label = tk.Label(
+        root,
+        text="",
+        width=40,
+        height=2,
+        bg="#0f0f1e",
+        fg="#00ff00",
+        font=("Courier New", 10, "bold"),
+        relief="solid",
+        anchor="center",   # perfect center
+        justify="center"
+    )
+
+    message_label.pack(pady=(20, 10))
+
+    return message_label
+
+
+# SHOW MESSAGE
+def log_message(message_label, message):
+
+    message_label.config(text=message)
