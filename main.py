@@ -11,13 +11,10 @@ def main():
     canvas, origin = init_canvas(root)
     create_grid(canvas)
 
-    # Create robot and explicitly set starting position at (0,0)
+    # Create robot at (0,0) bottom-left
     robot = Robot(canvas, origin, "robot.png")
-    robot.x, robot.y = 0, 0   # ensure bottom-left start
+    robot.x, robot.y = 0, 0
     robot.update_position()
-
-
-    # -> Below are codes for testing
 
     # Example controls
     def move_forward():
@@ -26,27 +23,17 @@ def main():
     def move_backward():
         robot.move("backward")
 
-    def turn_north():
-        robot.change_direction("north")
+    def rotate_left():
+        robot.rotate_left()
 
-    def turn_south():
-        robot.change_direction("south")
-
-    def turn_east():
-        robot.change_direction("east")
-
-    def turn_west():
-        robot.change_direction("west")
+    def rotate_right():
+        robot.rotate_right()
 
     # Buttons for testing
     tk.Button(root, text="Forward", command=move_forward).pack(side="left")
     tk.Button(root, text="Backward", command=move_backward).pack(side="left")
-    tk.Button(root, text="North", command=turn_north).pack(side="left")
-    tk.Button(root, text="South", command=turn_south).pack(side="left")
-    tk.Button(root, text="East", command=turn_east).pack(side="left")
-    tk.Button(root, text="West", command=turn_west).pack(side="left")
-
-    # <-
+    tk.Button(root, text="Rotate Left", command=rotate_left).pack(side="left")
+    tk.Button(root, text="Rotate Right", command=rotate_right).pack(side="left")
 
     root.mainloop()
 
