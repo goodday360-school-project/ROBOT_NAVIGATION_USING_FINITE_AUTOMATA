@@ -85,7 +85,7 @@ def create_text_display(root):
     message_label = tk.Label(
         root,
         text="",
-        width=40,
+        width=55,
         height=2,
         bg="#0f0f1e",
         fg="#00ff00",

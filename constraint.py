@@ -40,13 +40,18 @@ class Constraints:
         """Update constraint tracking after valid command"""
         if command in [CMD_FORWARD, CMD_BACK]:
             self.last_movement = command
-        
-        if command in [CMD_LEFT, CMD_RIGHT]:
+            self.last_turn = None
+        elif command in [CMD_LEFT, CMD_RIGHT]:
             self.last_turn = command
+            self.last_movement = None
             if command == CMD_LEFT:
                 self.left_turns += 1
             elif command == CMD_RIGHT:
                 self.right_turns += 1
+        else:
+            # Non-movement/turn commands clear both immediate history
+            self.last_movement = None
+            self.last_turn = None
 
     def reset(self):
         """Reset all constraints"""
