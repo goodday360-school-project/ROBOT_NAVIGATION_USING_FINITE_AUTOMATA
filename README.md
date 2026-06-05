@@ -45,7 +45,7 @@ loop : (forward -> left)x4
     no LL or RR and no FB or BF)
 - Files: energy.py and constraints.py
 
-## Pick/Drop & Loop detection
+## Pick/Drop & Loop detection ✅
 - Pick/drop state
 - cannot pick twice
 - cannot drop before pick
