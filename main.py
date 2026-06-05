@@ -3,6 +3,9 @@ from grid import create_energy_display, init_canvas, create_grid, update_energy_
 from robot import Robot
 from energy import Energy
 from constraint import Constraints
+from tasks import Tasks
+from loop_detector import LoopDetector 
+
 
 def main():
     root = tk.Tk()
@@ -21,6 +24,9 @@ def main():
     energy = Energy()
     # constraints system
     constraints = Constraints()
+
+    tasks = Tasks()
+    loop_det = LoopDetector()
     
     energy_text_id = create_energy_display(canvas, canvas_w, canvas_h)
     update_energy_display(canvas, energy_text_id, energy.current, energy.max)
@@ -40,6 +46,7 @@ def main():
         
         if energy.can_execute("forward"):
             robot.move("forward")
+            loop_det.update("forward")
             constraints.update("forward")
             energy.consume("forward")
             update_energy_display(canvas, energy_text_id, energy.current, energy.max)
@@ -55,6 +62,7 @@ def main():
         
         if energy.can_execute("back"):
             robot.move("backward")
+            loop_det.update("back") # this breaks the CCW streak
             constraints.update("back")
             energy.consume("back")
             update_energy_display(canvas, energy_text_id, energy.current, energy.max)
@@ -70,6 +78,7 @@ def main():
         
         if energy.can_execute("left"):
             robot.rotate_left()
+            loop_det.update("left")
             constraints.update("left")
             energy.consume("left")
             update_energy_display(canvas, energy_text_id, energy.current, energy.max)
@@ -85,12 +94,44 @@ def main():
         
         if energy.can_execute("right"):
             robot.rotate_right()
+            loop_det.update("right")
             constraints.update("right")
             energy.consume("right")
             update_energy_display(canvas, energy_text_id, energy.current, energy.max)
             log_message(text_output, f"Rotated right! ")
         else:
             log_message(text_output, "Not enough energy!")
+
+    def do_pick():
+        if not tasks.can_pick():
+            log_message(text_output, "Already holding! Drop fisrt.")
+            return
+        tasks.pick()
+        loop_det.update("pick") # pick breaks loop streak
+        log_message(text_output, f"Picked up item! Tasks done: {tasks.pick_drop_count}/2")
+
+
+    def do_drop():
+        if not tasks.can_drop():
+            log_message(text_output, "Nothing to drop! Pick first.")
+            return
+        tasks.drop()
+        loop_det.update("drop") # drop breaks loop streak
+        remaining = max(0, 2 - tasks.pick_drop_count)
+        if remaining == 0:
+            log_message(text_output, f"Dropped! All tasks done. You can now STOP.")
+        else:
+            log_message(text_output, f"Dropped! {remaining} more task(s) needed.")
+
+
+    def do_stop():
+        if not loop_det.has_ccw_loop():
+            log_message(text_output, "Need 1 CCW loop first! (F L F L F L F L)")
+        elif not tasks.can_stop():
+            remaining = 2 - tasks.pick_drop_count
+            log_message(text_output, f"Need {remaining} more pick-drop task(s).")
+        else:
+            log_message(text_output, "STOPPED! All rules satisfied. Well done!") 
 
     # recharge and reset energy
     def recharge():
@@ -103,6 +144,8 @@ def main():
     def reset_energy():
         energy.reset()
         constraints.reset()
+        tasks.reset()
+        loop_det.reset()
         update_energy_display(canvas, energy_text_id, energy.current, energy.max)
         log_message(text_output, "Energy and constraints reset!")
 
@@ -113,7 +156,10 @@ def main():
     tk.Button(root, text="Rotate Right", command=rotate_right).pack(side="left")
     tk.Button(root, text="Recharge", command=recharge).pack(side="left")
     tk.Button(root, text="Reset Energy", command=reset_energy).pack(side="left")
-
+    tk.Button(root, text="Pick", command=do_pick).pack(side="left")
+    tk.Button(root, text="Drop", command=do_drop).pack(side="left")
+    tk.Button(root, text="Stop", command=do_stop).pack(side="left")
+    
     root.mainloop()
 
 if __name__ == "__main__":

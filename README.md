@@ -49,7 +49,7 @@ loop : (forward -> left)x4
 - Pick/drop state
 - cannot pick twice
 - cannot drop before pick
-- al least 2 pick-drop tasks
+- at least 2 pick-drop tasks
 - detect counter-clockwise loop: F L F L F L F L
 - Files: loop_detector.py, tasks.py
 
