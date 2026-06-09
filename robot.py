@@ -71,3 +71,5 @@ class Robot:
         if 0 <= new_x < GRID_SIZE and 0 <= new_y < GRID_SIZE:
             self.x, self.y = new_x, new_y
             self.update_position()
+            return True
+        return False

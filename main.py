@@ -33,7 +33,7 @@ def main():
     
     # Create robot at (0,0) bottom-left
     robot = Robot(canvas, origin, "robot.png")
-    robot.x, robot.y = 0, 0
+    robot.x, robot.y = 3, 3
     robot.update_position()
 
     # -> Below code are testing code
@@ -45,12 +45,14 @@ def main():
             return
         
         if energy.can_execute("forward"):
-            robot.move("forward")
-            loop_det.update("forward")
-            constraints.update("forward")
-            energy.consume("forward")
-            update_energy_display(canvas, energy_text_id, energy.current, energy.max)
-            log_message(text_output, f"Moved forward!")
+            if robot.move("forward"):
+                loop_det.update("forward")
+                constraints.update("forward")
+                energy.consume("forward")
+                update_energy_display(canvas, energy_text_id, energy.current, energy.max)
+                log_message(text_output, "Moved forward!")
+            else:
+                log_message(text_output, "Can't move forward! Wall ahead.")
         else:
             log_message(text_output, "Not enough energy!")
 
@@ -61,12 +63,14 @@ def main():
             return
         
         if energy.can_execute("back"):
-            robot.move("backward")
-            loop_det.update("back") # this breaks the CCW streak
-            constraints.update("back")
-            energy.consume("back")
-            update_energy_display(canvas, energy_text_id, energy.current, energy.max)
-            log_message(text_output, f"Moved backward! ")
+            if robot.move("backward"):
+                loop_det.update("back") # this breaks the CCW streak
+                constraints.update("back")
+                energy.consume("back")
+                update_energy_display(canvas, energy_text_id, energy.current, energy.max)
+                log_message(text_output, "Moved backward! ")
+            else:
+                log_message(text_output, "Can't move backward! Wall behind.")
         else:
             log_message(text_output, "Not enough energy!")
 
