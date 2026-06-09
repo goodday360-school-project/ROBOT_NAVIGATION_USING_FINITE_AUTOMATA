@@ -11,7 +11,8 @@ CELL_ODD = "#16213e"
 BORDER_COLOR = "#e94560"
 LABEL_COLOR = "#a8b2d8"
 COORD_COLOR = "#64ffda"
-ENERGY_COLOR = "#00ff00"  # green for energy
+ENERGY_COLOR = "#00ff00"
+ITEM_COLOR = "#FFD700"   # gold star
 
 
 def create_grid(canvas):
@@ -60,16 +61,14 @@ def create_grid(canvas):
 
 
 def create_energy_display(canvas, canvas_w, canvas_h):
-    """Create energy display at top-right of canvas"""
     energy_text_id = canvas.create_text(
-        canvas_w - PADDING - 35, PADDING-12 ,
+        canvas_w - PADDING - 35, PADDING - 12,
         text="Energy: 5/5", fill=ENERGY_COLOR, font=("Courier New", 12, "bold")
     )
     return energy_text_id
 
 
 def update_energy_display(canvas, energy_text_id, current_energy, max_energy):
-    """Update energy display text"""
     canvas.itemconfig(energy_text_id, text=f"Energy: {current_energy}/{max_energy}")
 
 
@@ -79,9 +78,9 @@ def init_canvas(root):
     canvas = tk.Canvas(root, width=canvas_w, height=canvas_h, bg=BG_COLOR, highlightthickness=0)
     canvas.pack(padx=PADDING, pady=PADDING)
     return canvas, (PADDING + AXIS_OFFSET, PADDING), canvas_w, canvas_h
-# CREATE TEXT DISPLAY
-def create_text_display(root):
 
+
+def create_text_display(root):
     message_label = tk.Label(
         root,
         text="",
@@ -91,16 +90,32 @@ def create_text_display(root):
         fg="#00ff00",
         font=("Courier New", 10, "bold"),
         relief="solid",
-        anchor="center",   # perfect center
+        anchor="center",
         justify="center"
     )
-
     message_label.pack(pady=(20, 10))
-
     return message_label
 
 
-# SHOW MESSAGE
 def log_message(message_label, message):
-
     message_label.config(text=message)
+
+
+def draw_items(canvas, items, origin):
+    """Draw all items on the grid. Adds canvas_id to each item dict."""
+    ox, oy = origin
+    for item in items:
+        x_pix = ox + item["x"] * CELL_SIZE + CELL_SIZE // 2
+        y_pix = oy + (GRID_SIZE - 1 - item["y"]) * CELL_SIZE + CELL_SIZE // 2
+        cid = canvas.create_text(
+            x_pix, y_pix,
+            text="★", fill=ITEM_COLOR,
+            font=("Courier New", 22, "bold"),
+            tags="item"
+        )
+        item["canvas_id"] = cid
+
+
+def remove_item_from_canvas(canvas, canvas_id):
+    """Remove a single item sprite from the canvas."""
+    canvas.delete(canvas_id)
