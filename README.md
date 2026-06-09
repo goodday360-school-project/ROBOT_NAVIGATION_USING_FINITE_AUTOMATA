@@ -53,7 +53,7 @@ loop : (forward -> left)x4
 - detect counter-clockwise loop: F L F L F L F L
 - Files: loop_detector.py, tasks.py
 
-## Gui/simulation
+## Gui/simulation ✅
 - create start button
 - before move robot press start (others buttons are hidden)
 - when start button press, other buttons shows and start buttons will be hidden
