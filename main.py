@@ -155,7 +155,7 @@ def main():
     tk.Button(root, text="Rotate Left", command=rotate_left).pack(side="left")
     tk.Button(root, text="Rotate Right", command=rotate_right).pack(side="left")
     tk.Button(root, text="Recharge", command=recharge).pack(side="left")
-    tk.Button(root, text="Reset Energy", command=reset_energy).pack(side="left")
+    tk.Button(root, text="Reset", command=reset_energy).pack(side="left")
     tk.Button(root, text="Pick", command=do_pick).pack(side="left")
     tk.Button(root, text="Drop", command=do_drop).pack(side="left")
     tk.Button(root, text="Stop", command=do_stop).pack(side="left")
