@@ -15,7 +15,7 @@ def main():
 
     # Create text display at top middle
     text_output = create_text_display(root)
-    log_message(text_output, "Robot Navigation Simulator initialized!")
+    log_message(text_output, "Press START to begin!")
 
     canvas, origin, canvas_w, canvas_h = init_canvas(root)
     create_grid(canvas)
@@ -131,7 +131,8 @@ def main():
             remaining = 2 - tasks.pick_drop_count
             log_message(text_output, f"Need {remaining} more pick-drop task(s).")
         else:
-            log_message(text_output, "STOPPED! All rules satisfied. Well done!") 
+            log_message(text_output, "STOPPED! All rules satisfied. Well done!")
+            _show_start()
 
     # recharge and reset energy
     def recharge():
@@ -146,19 +147,69 @@ def main():
         constraints.reset()
         tasks.reset()
         loop_det.reset()
+        robot.x, robot.y = 0, 0
+        robot.direction_index = 0
+        robot.update_position()
+        robot._update_image()
         update_energy_display(canvas, energy_text_id, energy.current, energy.max)
-        log_message(text_output, "Energy and constraints reset!")
+        log_message(text_output, "Reset! Press START to begin again.")
+        _show_start()
 
-    # Buttons for testing
-    tk.Button(root, text="Forward", command=move_forward).pack(side="left")
-    tk.Button(root, text="Backward", command=move_backward).pack(side="left")
-    tk.Button(root, text="Rotate Left", command=rotate_left).pack(side="left")
-    tk.Button(root, text="Rotate Right", command=rotate_right).pack(side="left")
-    tk.Button(root, text="Recharge", command=recharge).pack(side="left")
-    tk.Button(root, text="Reset", command=reset_energy).pack(side="left")
-    tk.Button(root, text="Pick", command=do_pick).pack(side="left")
-    tk.Button(root, text="Drop", command=do_drop).pack(side="left")
-    tk.Button(root, text="Stop", command=do_stop).pack(side="left")
+    # ── button frame ────────────────────────────────────────────────────────
+    btn_frame = tk.Frame(root, bg="#1a1a2e")
+    btn_frame.pack(pady=(0, 12))
+
+    BTN_STYLE = dict(
+        bg="#16213e", fg="#64ffda",
+        activebackground="#0f3460", activeforeground="#e94560",
+        font=("Courier New", 10, "bold"),
+        relief="flat", bd=0, padx=10, pady=6, cursor="hand2"
+    )
+    START_STYLE = dict(
+        bg="#e94560", fg="#ffffff",
+        activebackground="#c73652", activeforeground="#ffffff",
+        font=("Courier New", 11, "bold"),
+        relief="flat", bd=0, padx=18, pady=8, cursor="hand2"
+    )
+
+    def _show_start():
+        for w in action_widgets:
+            w.pack_forget()
+        btn_start.pack(in_=btn_frame, side="left", padx=4)
+
+    def _show_actions():
+        btn_start.pack_forget()
+        for w in action_widgets:
+            w.pack(in_=btn_frame, side="left", padx=3)
+
+    def do_start():
+        _show_actions()
+        log_message(text_output, "Robot Navigation Simulator initialized!")
+
+    btn_start = tk.Button(btn_frame, text="▶  START", command=do_start, **START_STYLE)
+
+    action_widgets = [
+        tk.Button(btn_frame, text="Forward",      command=move_forward,  **BTN_STYLE),
+        tk.Button(btn_frame, text="Backward",     command=move_backward, **BTN_STYLE),
+        tk.Button(btn_frame, text="Rotate Left",  command=rotate_left,   **BTN_STYLE),
+        tk.Button(btn_frame, text="Rotate Right", command=rotate_right,  **BTN_STYLE),
+        tk.Button(btn_frame, text="Recharge",     command=recharge,      **BTN_STYLE),
+        tk.Button(btn_frame, text="Pick",         command=do_pick,       **BTN_STYLE),
+        tk.Button(btn_frame, text="Drop",         command=do_drop,       **BTN_STYLE),
+        tk.Button(btn_frame, text="Stop",         command=do_stop,
+                  bg="#e94560", fg="#ffffff",
+                  activebackground="#c73652", activeforeground="#ffffff",
+                  font=("Courier New", 10, "bold"),
+                  relief="flat", bd=0, padx=10, pady=6, cursor="hand2"),
+        tk.Button(btn_frame, text="Reset",        command=reset_energy,
+                  bg="#555577", fg="#ffffff",
+                  activebackground="#333355", activeforeground="#ffffff",
+                  font=("Courier New", 10, "bold"),
+                  relief="flat", bd=0, padx=10, pady=6, cursor="hand2"),
+    ]
+
+    # Boot into Start-only view
+    _show_start()
     
     root.mainloop()
 
