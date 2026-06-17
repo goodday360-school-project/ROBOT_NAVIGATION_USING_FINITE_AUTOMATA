@@ -27,11 +27,8 @@ class Energy:
     def consume(self, command: str) -> bool:
         """Consume energy for command. Return True if successful"""
         if command == CMD_RECHARGE:
-            # Recharge only works when energy = 0
-            if self.current == 0:
-                self.current = self.max
-                return True
-            return False
+            self.current = self.max
+            return True
         
         if self.can_execute(command):
             cost = ENERGY_COSTS.get(command, 0)
