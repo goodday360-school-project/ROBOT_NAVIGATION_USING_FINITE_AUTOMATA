@@ -17,14 +17,14 @@ pip install -r requirements.txt
 - the robot must perform at least one counter-clockwise 
 loop : (forward -> left)x4
 
-## Main: ✅
+## Main: 
 - Define the command language alphabet
 - create DFA/NFA states
 - create transition rules
 - handle logic
 - Files: shared.py, automata.py, validator.py
 
-## Robot Movement & Grid System: ✅
+## Robot Movement & Grid System: 
 - build 8 * 8 grid System
 - Robot coordinates
 - Robot directions: north, south, east and west
@@ -33,7 +33,7 @@ loop : (forward -> left)x4
 - Direction rotation logic
 - Files: robot.py, grid.py
 
-## Energy & Rule Constraints ✅
+## Energy & Rule Constraints 
 - the rules: F = forward, B = backward, L = left...
 - Energy system
 - Recharge logic
@@ -41,11 +41,11 @@ loop : (forward -> left)x4
 - Reverse movement restriction
 - Left/right balance tracking
 - Detect invalid command patterns
-- (Rules: energy = 5, recharge only when energy = 0
+- (Rules: energy = 5
     no LL or RR and no FB or BF)
 - Files: energy.py and constraints.py
 
-## Pick/Drop & Loop detection ✅
+## Pick/Drop & Loop detection 
 - Pick/drop state
 - cannot pick twice
 - cannot drop before pick
@@ -53,7 +53,7 @@ loop : (forward -> left)x4
 - detect counter-clockwise loop: F L F L F L F L
 - Files: loop_detector.py, tasks.py
 
-## Gui/simulation ✅
+## Gui/simulation 
 - create start button
 - before move robot press start (others buttons are hidden)
 - when start button press, other buttons shows and start buttons will be hidden

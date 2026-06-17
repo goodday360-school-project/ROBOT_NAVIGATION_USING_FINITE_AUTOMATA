@@ -25,6 +25,17 @@ MAX_ENERGY = 5
 START_X = 0
 START_Y = 0
 START_DIR = "N"
+CELL_SIZE = 70
+PADDING = 20
+AXIS_OFFSET = 30
+BG_COLOR = "#1a1a2e"
+CELL_EVEN = "#1e2a45"
+CELL_ODD = "#16213e"
+BORDER_COLOR = "#e94560"
+LABEL_COLOR = "#a8b2d8"
+COORD_COLOR = "#64ffda"
+ENERGY_COLOR = "#00ff00"
+ITEM_COLOR = "#FFD700"   
 
 # order matters for turning
 DIRECTIONS = ["N", "E", "S", "W"] 

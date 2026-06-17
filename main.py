@@ -7,6 +7,10 @@ from energy import Energy
 from constraint import Constraints
 from tasks import Tasks
 from loop_detector import LoopDetector
+from shared import (CMD_START, CMD_STOP, CMD_FORWARD,
+                    CMD_BACK, CMD_LEFT, CMD_RIGHT,
+                    CMD_PICK, CMD_DROP, CMD_RECHARGE,
+                    ALPHABET, GRID_SIZE, CELL_SIZE, PADDING, AXIS_OFFSET)
 
 
 def main():
