@@ -11,7 +11,7 @@ from loop_detector import LoopDetector
 from shared import (CMD_START, CMD_STOP, CMD_FORWARD,
                     CMD_BACK, CMD_LEFT, CMD_RIGHT,
                     CMD_PICK, CMD_DROP, CMD_RECHARGE,
-                    ALPHABET, GRID_SIZE, CELL_SIZE, PADDING, AXIS_OFFSET)
+                    ALPHABET)
 
 
 def main():
@@ -38,7 +38,7 @@ def main():
     energy_text_id = create_energy_display(canvas, canvas_w, canvas_h)
     update_energy_display(canvas, energy_text_id, energy.current, energy.max)
 
-    # Star HUD counter (shows how many stars picked up, e.g. "★ x1")
+    # Star HUD counter (shows whether a star is currently held, "★ x0"/"★ x1")
     star_text_id = create_star_display(canvas, canvas_w, canvas_h)
     update_star_display(canvas, star_text_id, 0)
 
@@ -119,15 +119,19 @@ def main():
                 log_message(text_output, "No item here! Move to a ★ cell.")
             return
         remove_item_from_canvas(canvas, item["canvas_id"])
+        flash_pickup(canvas, robot.x, robot.y, origin)
         loop_det.update("pick")
+        update_star_display(canvas, star_text_id, 1)
         log_message(text_output, f"Picked up item! Tasks done: {tasks.pick_drop_count}/3")
 
     def do_drop():
         if not tasks.can_drop():
             log_message(text_output, "Nothing to drop! Pick first.")
             return
-        tasks.drop()
+        new_item = tasks.drop(robot.x, robot.y)
+        draw_items(canvas, [new_item], origin)
         loop_det.update("drop")
+        update_star_display(canvas, star_text_id, 0)
         remaining = max(0, 3 - tasks.pick_drop_count)
         if remaining == 0:
             log_message(text_output, "Dropped! All tasks done. You can now STOP.")
