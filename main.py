@@ -7,10 +7,8 @@ from energy import Energy
 from constraint import Constraints
 from tasks import Tasks
 from loop_detector import LoopDetector
-from shared import (CMD_START, CMD_STOP, CMD_FORWARD,
-                    CMD_BACK, CMD_LEFT, CMD_RIGHT,
-                    CMD_PICK, CMD_DROP, CMD_RECHARGE,
-                    ALPHABET, GRID_SIZE, CELL_SIZE, PADDING, AXIS_OFFSET)
+from shared import CMD_BACK, CMD_BACK, CMD_DROP, CMD_FORWARD, CMD_LEFT, CMD_PICK, CMD_PICK, CMD_RECHARGE, CMD_RIGHT
+                    
 
 
 def main():
@@ -46,14 +44,14 @@ def main():
     robot.update_position()
 
     def move_forward():
-        if not constraints.is_valid("forward"):
+        if not constraints.is_valid(CMD_FORWARD):
             log_message(text_output, "Cannot go forward! You just went backward.")
             return
-        if energy.can_execute("forward"):
-            if robot.move("forward"):
-                loop_det.update("forward")
-                constraints.update("forward")
-                energy.consume("forward")
+        if energy.can_execute(CMD_FORWARD):
+            if robot.move(CMD_FORWARD):
+                loop_det.update(CMD_FORWARD)
+                constraints.update(CMD_FORWARD)
+                energy.consume(CMD_FORWARD)
                 update_energy_display(canvas, energy_text_id, energy.current, energy.max)
                 log_message(text_output, "Moved forward!")
             else:
@@ -62,14 +60,14 @@ def main():
             log_message(text_output, "Not enough energy!")
 
     def move_backward():
-        if not constraints.is_valid("back"):
+        if not constraints.is_valid(CMD_BACK):
             log_message(text_output, "Cannot go backward! You just went forward.")
             return
-        if energy.can_execute("back"):
-            if robot.move("backward"):
-                loop_det.update("back")
-                constraints.update("back")
-                energy.consume("back")
+        if energy.can_execute(CMD_BACK):
+            if robot.move(CMD_BACK):
+                loop_det.update(CMD_BACK)
+                constraints.update(CMD_BACK)
+                energy.consume(CMD_BACK)
                 update_energy_display(canvas, energy_text_id, energy.current, energy.max)
                 log_message(text_output, "Moved backward!")
             else:
@@ -78,28 +76,28 @@ def main():
             log_message(text_output, "Not enough energy!")
 
     def rotate_left():
-        if not constraints.is_valid("left"):
+        if not constraints.is_valid(CMD_LEFT):
             log_message(text_output, "Cannot turn left twice in a row!")
             return
-        if energy.can_execute("left"):
+        if energy.can_execute(CMD_LEFT):
             robot.rotate_left()
-            loop_det.update("left")
-            constraints.update("left")
-            energy.consume("left")
+            loop_det.update(CMD_LEFT)
+            constraints.update(CMD_LEFT)
+            energy.consume(CMD_LEFT)
             update_energy_display(canvas, energy_text_id, energy.current, energy.max)
             log_message(text_output, "Rotated left!")
         else:
             log_message(text_output, "Not enough energy!")
 
     def rotate_right():
-        if not constraints.is_valid("right"):
+        if not constraints.is_valid(CMD_RIGHT):
             log_message(text_output, "Cannot turn right twice in a row!")
             return
-        if energy.can_execute("right"):
+        if energy.can_execute(CMD_RIGHT):
             robot.rotate_right()
-            loop_det.update("right")
-            constraints.update("right")
-            energy.consume("right")
+            loop_det.update(CMD_RIGHT)
+            constraints.update(CMD_RIGHT)
+            energy.consume(CMD_RIGHT)
             update_energy_display(canvas, energy_text_id, energy.current, energy.max)
             log_message(text_output, "Rotated right!")
         else:
@@ -114,7 +112,7 @@ def main():
                 log_message(text_output, "No item here! Move to a ★ cell.")
             return
         remove_item_from_canvas(canvas, item["canvas_id"])
-        loop_det.update("pick")
+        loop_det.update(CMD_PICK)
         log_message(text_output, f"Picked up item! Tasks done: {tasks.pick_drop_count}/3")
 
     def do_drop():
@@ -122,7 +120,7 @@ def main():
             log_message(text_output, "Nothing to drop! Pick first.")
             return
         tasks.drop()
-        loop_det.update("drop")
+        loop_det.update(CMD_DROP)
         remaining = max(0, 3 - tasks.pick_drop_count)
         if remaining == 0:
             log_message(text_output, "Dropped! All tasks done. You can now STOP.")
@@ -140,7 +138,7 @@ def main():
             _show_start()
 
     def recharge():
-        if energy.consume("recharge"):
+        if energy.consume(CMD_RECHARGE):
             update_energy_display(canvas, energy_text_id, energy.current, energy.max)
             log_message(text_output, "Recharged! Energy: 5/5")
         else:
