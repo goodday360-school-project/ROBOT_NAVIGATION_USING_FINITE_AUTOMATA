@@ -1,16 +1,13 @@
 import tkinter as tk
 from grid import (create_energy_display, init_canvas, create_grid,
                   update_energy_display, create_text_display, log_message,
-                  draw_items, remove_item_from_canvas)
+                  draw_items, remove_item_from_canvas, flash_pickup,
+                  create_star_display, update_star_display)
 from robot import Robot
 from energy import Energy
 from constraint import Constraints
 from tasks import Tasks
 from loop_detector import LoopDetector
-from shared import (CMD_START, CMD_STOP, CMD_FORWARD,
-                    CMD_BACK, CMD_LEFT, CMD_RIGHT,
-                    CMD_PICK, CMD_DROP, CMD_RECHARGE,
-                    ALPHABET, GRID_SIZE, CELL_SIZE, PADDING, AXIS_OFFSET)
 
 
 def main():
@@ -37,10 +34,14 @@ def main():
     energy_text_id = create_energy_display(canvas, canvas_w, canvas_h)
     update_energy_display(canvas, energy_text_id, energy.current, energy.max)
 
+    # Star HUD counter (shows how many stars picked up, e.g. "★ x1")
+    star_text_id = create_star_display(canvas, canvas_w, canvas_h)
+    update_star_display(canvas, star_text_id, 0)
+
     # Draw items on the grid
     draw_items(canvas, tasks.items, origin)
 
-    # Create robot at center
+    # Create robot at start position
     robot = Robot(canvas, origin, "robot.png")
     robot.x, robot.y = 0, 0
     robot.update_position()
@@ -114,15 +115,19 @@ def main():
                 log_message(text_output, "No item here! Move to a ★ cell.")
             return
         remove_item_from_canvas(canvas, item["canvas_id"])
+        flash_pickup(canvas, robot.x, robot.y, origin)
         loop_det.update("pick")
+        update_star_display(canvas, star_text_id, 1)
         log_message(text_output, f"Picked up item! Tasks done: {tasks.pick_drop_count}/3")
 
     def do_drop():
         if not tasks.can_drop():
             log_message(text_output, "Nothing to drop! Pick first.")
             return
-        tasks.drop()
+        new_item = tasks.drop(robot.x, robot.y)
+        draw_items(canvas, [new_item], origin)
         loop_det.update("drop")
+        update_star_display(canvas, star_text_id, 0)
         remaining = max(0, 3 - tasks.pick_drop_count)
         if remaining == 0:
             log_message(text_output, "Dropped! All tasks done. You can now STOP.")
@@ -156,6 +161,7 @@ def main():
         robot.update_position()
         robot._update_image()
         update_energy_display(canvas, energy_text_id, energy.current, energy.max)
+        update_star_display(canvas, star_text_id, 0)
         draw_items(canvas, tasks.items, origin)
         log_message(text_output, "Reset! Press START to begin again.")
         _show_start()

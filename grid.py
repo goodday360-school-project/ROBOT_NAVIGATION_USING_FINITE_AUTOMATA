@@ -1,5 +1,5 @@
 import tkinter as tk
-from shared import CELL_SIZE, GRID_SIZE, PADDING, AXIS_OFFSET, BG_COLOR, CELL_EVEN, CELL_ODD, BORDER_COLOR, LABEL_COLOR, COORD_COLOR, ENERGY_COLOR, ITEM_COLOR
+
 CELL_SIZE = 70
 GRID_SIZE = 8
 PADDING = 20
@@ -12,7 +12,7 @@ BORDER_COLOR = "#e94560"
 LABEL_COLOR = "#a8b2d8"
 COORD_COLOR = "#64ffda"
 ENERGY_COLOR = "#00ff00"
-ITEM_COLOR = "#FFD700"   
+ITEM_COLOR = "#FFD700"   # gold star
 
 
 def create_grid(canvas):
@@ -119,3 +119,30 @@ def draw_items(canvas, items, origin):
 def remove_item_from_canvas(canvas, canvas_id):
     """Remove a single item sprite from the canvas."""
     canvas.delete(canvas_id)
+
+
+def flash_pickup(canvas, x, y, origin):
+    """Show a brief green '+1' flash where an item was picked up."""
+    ox, oy = origin
+    x_pix = ox + x * CELL_SIZE + CELL_SIZE // 2
+    y_pix = oy + (GRID_SIZE - 1 - y) * CELL_SIZE + CELL_SIZE // 2
+    flash_id = canvas.create_text(
+        x_pix, y_pix - 30,
+        text="+1 ✓", fill="#00ff00",
+        font=("Courier New", 14, "bold")
+    )
+    canvas.after(700, lambda: canvas.delete(flash_id))
+
+
+def create_star_display(canvas, canvas_w, canvas_h):
+    """Create a persistent 'Star x0' HUD counter, left of the energy display."""
+    star_text_id = canvas.create_text(
+        canvas_w - PADDING - 130, PADDING - 12,
+        text="★ x0", fill=ITEM_COLOR, font=("Courier New", 12, "bold")
+    )
+    return star_text_id
+
+
+def update_star_display(canvas, star_text_id, count):
+    """Update the star HUD counter text."""
+    canvas.itemconfig(star_text_id, text=f"★ x{count}")
