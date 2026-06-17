@@ -38,7 +38,7 @@ def main():
 
     # Create robot at center
     robot = Robot(canvas, origin, "robot.png")
-    robot.x, robot.y = 3, 3
+    robot.x, robot.y = 0, 0
     robot.update_position()
 
     def move_forward():

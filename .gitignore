@@ -2,3 +2,4 @@ project_robot_FA.drawio
 venv/
 .venv/
 __pycache__/
+*.pyc
