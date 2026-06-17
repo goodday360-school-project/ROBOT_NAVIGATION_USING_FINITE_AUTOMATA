@@ -72,3 +72,6 @@ main.py
               ├── robot.py
               └── tasks.py
 
+TASKS:
+ - move forward or backward
+ - 
