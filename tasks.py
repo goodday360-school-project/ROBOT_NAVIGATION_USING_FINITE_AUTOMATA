@@ -3,12 +3,12 @@
 # Rules:
 # - cannot pick twice without dropping first
 # - cannot drop before picking
-# - at least 3 complete pick-drop tasks must be done before STOP
+# - at least 1 complete pick-drop task must be done before STOP
 # - pick only succeeds when the robot is standing on an item cell
 
 from shared import CMD_PICK, CMD_DROP
 
-MIN_TASKS = 3  # minimum pick-drop pairs required before STOP
+MIN_TASKS = 1  # minimum pick-drop pairs required before STOP
 
 ITEM_POSITIONS = [{"x": 1, "y": 6}, {"x": 5, "y": 2}, {"x": 6, "y": 6}]  # three fixed spawn points
 

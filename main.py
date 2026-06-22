@@ -122,7 +122,7 @@ def main():
         flash_pickup(canvas, robot.x, robot.y, origin)
         loop_det.update("pick")
         update_star_display(canvas, star_text_id, 1)
-        log_message(text_output, f"Picked up item! Tasks done: {tasks.pick_drop_count}/3")
+        log_message(text_output, f"Picked up item! Tasks done: {tasks.pick_drop_count}/1")
 
     def do_drop():
         if not tasks.can_drop():
@@ -133,17 +133,19 @@ def main():
             draw_items(canvas, [new_item], origin)
         loop_det.update("drop")
         update_star_display(canvas, star_text_id, 0)
-        remaining = max(0, 3 - tasks.pick_drop_count)
-        if remaining == 0:
-            log_message(text_output, "Dropped! All tasks done. You can now STOP.")
-        else:
+        remaining = max(0, 1 - tasks.pick_drop_count)
+        if remaining > 0:
             log_message(text_output, f"Dropped! {remaining} more task(s) needed.")
+        elif not loop_det.has_ccw_loop():
+            log_message(text_output, "Dropped! Tasks done, but still need 1 CCW loop (F L F L F L F L).")
+        else:
+            log_message(text_output, "Dropped! All tasks done. You can now STOP.")
 
     def do_stop():
         if not loop_det.has_ccw_loop():
             log_message(text_output, "Need 1 CCW loop first! (F L F L F L F L)")
         elif not tasks.can_stop():
-            remaining = 3 - tasks.pick_drop_count
+            remaining = 1 - tasks.pick_drop_count
             log_message(text_output, f"Need {remaining} more pick-drop task(s).")
         else:
             log_message(text_output, "STOPPED! All rules satisfied. Well done!")
