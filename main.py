@@ -129,7 +129,8 @@ def main():
             log_message(text_output, "Nothing to drop! Pick first.")
             return
         new_item = tasks.drop(robot.x, robot.y)
-        draw_items(canvas, [new_item], origin)
+        if new_item is not None:
+            draw_items(canvas, [new_item], origin)
         loop_det.update("drop")
         update_star_display(canvas, star_text_id, 0)
         remaining = max(0, 3 - tasks.pick_drop_count)

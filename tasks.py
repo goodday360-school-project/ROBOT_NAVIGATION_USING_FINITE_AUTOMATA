@@ -56,14 +56,20 @@ class Tasks:
         """
         Execute a drop at (robot_x, robot_y).
         Returns the new item dict (no canvas_id yet) on success,
-        or None if not holding anything.
-        Increments the completed task counter on success and re-adds
-        the item to self.items so it can be picked up again.
+        or None if not holding anything, or if a star already exists
+        at this exact cell (prevents drawing a duplicate sprite).
+        Increments the completed task counter on success either way.
         """
         if not self.can_drop():
             return None
         self.is_holding = False
         self.pick_drop_count += 1
+
+        # avoid stacking two stars on the same cell
+        for existing in self.items:
+            if existing["x"] == robot_x and existing["y"] == robot_y:
+                return None  # cell already has a star; don't draw a duplicate
+
         new_item = {"x": robot_x, "y": robot_y}
         self.items.append(new_item)
         return new_item
